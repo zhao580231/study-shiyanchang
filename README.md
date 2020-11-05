@@ -3,4 +3,12 @@
 
 ## common
 
-通用模块，主要存储通用的entity、mapper、service（含impl）
+通用模块，主要存储通用的entity，以及通用的工具类
+
+## business
+
+业务模块，主要针对试验场管理，设备管理
+
+## manager
+
+管理模块，主要针对公司管理，用户管理
