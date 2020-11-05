@@ -1,0 +1,22 @@
+server:
+  port: 9002
+  servlet:
+    context-path: /business
+
+spring:
+  application:
+    name: business
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${server_addr}:3306/syc?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: root
+    password: 1py4I5FjANIjoEmSc9QA+
+    type: com.alibaba.druid.pool.DruidDataSource
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${server_addr}:8848
+
+mybatis:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  type-aliases-package: com.study.shiyanchang.common.entity.po

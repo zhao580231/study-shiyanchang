@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.shiyanchang.business.dao.TSensorRepairMapper">
+
+    <resultMap id="BaseResultMap" type="com.study.shiyanchang.common.entity.po.TSensorRepair">
+        <!--@Table t_sensor_repair-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="sensorId" column="sensor_id" jdbcType="INTEGER"/>
+        <result property="gmtCreate" column="gmt_create" jdbcType="INTEGER"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="applyUserId" column="apply_user_id" jdbcType="INTEGER"/>
+        <result property="solveUserId" column="solve_user_id" jdbcType="INTEGER"/>
+        <result property="solveTime" column="solve_time" jdbcType="INTEGER"/>
+    </resultMap>
+
+</mapper>

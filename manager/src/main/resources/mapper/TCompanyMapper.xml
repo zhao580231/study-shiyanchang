@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.shiyanchang.manager.dao.TCompanyMapper">
+
+    <resultMap id="BaseResultMap" type="com.study.shiyanchang.common.entity.po.TCompany">
+        <!--@Table t_company-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="addr" column="addr" jdbcType="VARCHAR"/>
+        <result property="tel" column="tel" jdbcType="VARCHAR"/>
+        <result property="contact" column="contact" jdbcType="VARCHAR"/>
+        <result property="provinceId" column="province_id" jdbcType="INTEGER"/>
+        <result property="cityId" column="city_id" jdbcType="INTEGER"/>
+        <result property="areaId" column="area_id" jdbcType="INTEGER"/>
+        <result property="isStop" column="is_stop" jdbcType="INTEGER"/>
+        <result property="isRoot" column="is_root" jdbcType="INTEGER"/>
+        <result property="gmtCreate" column="gmt_create" jdbcType="INTEGER"/>
+    </resultMap>
+
+</mapper>

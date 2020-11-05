@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.shiyanchang.manager.dao.TUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.study.shiyanchang.common.entity.po.TUser">
+        <!--@Table t_user-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="companyId" column="company_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="pwd" column="pwd" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="gmtCreate" column="gmt_create" jdbcType="INTEGER"/>
+        <result property="lastTime" column="last_time" jdbcType="INTEGER"/>
+        <result property="token" column="token" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from t_user where id = #{id}
+    </select>
+</mapper>
