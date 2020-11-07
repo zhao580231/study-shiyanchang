@@ -1,4 +1,4 @@
-package com.study.shiyanchang.business.filter;
+package com.study.shiyanchang.common.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.study.shiyanchang.common.base.ResponseUtils;
@@ -26,39 +26,27 @@ public class ServiceExceptionFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            logger.error("access {}, URL-params:{}, body-params:{},  access ip:{}",
-                    request.getRequestURI(), request.getQueryString(),
-                    toJSON(request.getParameterMap()), request.getRemoteAddr(), e);
             if (e instanceof NestedServletException) {
                 if (e.getCause().getClass().equals(ServiceException.class)) {
                     ServiceException se = (ServiceException)e.getCause();
-                    int code = se.getCode();
-                    String message = se.getMessage();
-                    response.setStatus(code);
-                    JSONObject json = new JSONObject();
-                    json.put("message", message);
-                    ResponseUtils.output(response, JSONObject.toJSONString(json));
+                    output(response, se.getCode(), se.getMessage());
                 } else {
-                    response.setStatus(ERROR_SYSTEM);
-                    JSONObject json = new JSONObject();
-                    json.put("message", "系统错误");
-                    ResponseUtils.output(response, JSONObject.toJSONString(json));
+                    output(response, ERROR_SYSTEM, "系统异常，请查看日志");
                 }
             }
             else if (e instanceof ServiceException) {
-                int code = ((ServiceException) e).getCode();
-                String message = e.getMessage();
-                response.setStatus(code);
-                JSONObject json = new JSONObject();
-                json.put("message", message);
-                ResponseUtils.output(response, JSONObject.toJSONString(json));
-                return;
+                output(response, ((ServiceException) e).getCode(), e.getMessage());
             } else {
-                response.setStatus(ERROR_SYSTEM);
-                JSONObject json = new JSONObject();
-                json.put("message", "系统错误");
-                ResponseUtils.output(response, JSONObject.toJSONString(json));
+                output(response, ERROR_SYSTEM, "系统异常，请查看日志");
             }
         }
+    }
+
+    private void output(HttpServletResponse response,int code,String msg){
+        response.setStatus(code);
+        JSONObject json = new JSONObject();
+        json.put("code", code);
+        json.put("message", msg);
+        ResponseUtils.output(response, JSONObject.toJSONString(json));
     }
 }

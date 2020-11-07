@@ -1,7 +1,7 @@
-package com.study.shiyanchang.manager.config;
+package com.study.shiyanchang.api.config;
 
+import com.study.shiyanchang.api.filter.UserTokenFilter;
 import com.study.shiyanchang.common.filter.ServiceExceptionFilter;
-import com.study.shiyanchang.manager.filter.RequestUrlFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,18 +11,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class FilterConfig {
-    /**
-     * 请求地址过滤器
-     * @return
-     */
-    @Bean
-    public FilterRegistrationBean requestUrlFilter() {
-        FilterRegistrationBean bean = new FilterRegistrationBean();
-        bean.setFilter(new RequestUrlFilter());
-        bean.addUrlPatterns("/*");
-        bean.setOrder(1);
-        return bean;
-    }
+
     /**
      * 用于对ServiceException的统一处理
      *
@@ -33,7 +22,22 @@ public class FilterConfig {
         FilterRegistrationBean bean = new FilterRegistrationBean();
         bean.setFilter(new ServiceExceptionFilter());
         bean.addUrlPatterns("/*");
+        bean.setOrder(1);
+        return bean;
+    }
+
+    /**
+     * 用于用户token校验
+     *
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean userTokenFilter() {
+        FilterRegistrationBean bean = new FilterRegistrationBean();
+        bean.setFilter(new UserTokenFilter());
+        bean.addUrlPatterns("/*");
         bean.setOrder(2);
         return bean;
     }
+
 }

@@ -16,4 +16,11 @@ public interface TUserService {
      * @return
      */
     TUser getById(int i);
+
+    /**
+     * 根据token获取用户信息
+     * @param token
+     * @return
+     */
+    TUser selectUserByToken(String token);
 }

@@ -2,13 +2,14 @@ package com.study.shiyanchang.business.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.phantomthief.scope.Scope;
-import com.study.shiyanchang.business.config.ApplicationContextUtil;
 import com.study.shiyanchang.business.config.MyProperties;
 import com.study.shiyanchang.business.service.MongoService;
 import com.study.shiyanchang.common.base.ResponseUtils;
 import com.study.shiyanchang.common.base.ResultCode;
 import com.study.shiyanchang.common.excption.ServiceException;
+import com.study.shiyanchang.common.util.ApplicationContextUtil;
 import com.study.shiyanchang.common.util.CheckUtil;
+import com.study.shiyanchang.common.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -28,9 +29,10 @@ public class RequestUrlFilter extends OncePerRequestFilter {
         MyProperties myProperties = ApplicationContextUtil.getBean(MyProperties.class);
         Scope.beginScope();
         try {
-            String realIp = getRealIp(request);
-            if(!myProperties.getAuthorizedRequestPath().contains(realIp)){
-                throw new ServiceException(ResultCode.ERROR_METHODS,"请求IP未注册到白名单内！");
+            String realIp = IpUtil.getRealIp(request);
+            String authorizedRequestPath = myProperties.getAuthorizedRequestPath();
+            if(!authorizedRequestPath.equals("*") && !authorizedRequestPath.contains(realIp)){
+                throw new ServiceException(ResultCode.ERROR_METHODS,"请求IP未注册到验证名单内！");
             }
             int lastIndexOf = requestURI.lastIndexOf("/");
             String times = requestURI.substring(lastIndexOf + 1);
@@ -43,7 +45,7 @@ public class RequestUrlFilter extends OncePerRequestFilter {
                 throw new ServiceException(ResultCode.ERROR_METHODS,"调用接口所传的时间戳超过固定期限！");
             }
             String realUrl = requestURI.substring(0,lastIndexOf);
-            if(!myProperties.getApiPathList().contains(realUrl)){
+            if(CheckUtil.checkRealUrl(myProperties.getApiPathList(), realUrl)){
                 throw new ServiceException(ResultCode.ERROR_METHODS,"调用接口地址未经过许可，或者不存在！");
             }
             MongoService mongoService = ApplicationContextUtil.getBean(MongoService.class);
@@ -61,57 +63,5 @@ public class RequestUrlFilter extends OncePerRequestFilter {
         }finally {
             Scope.endScope();
         }
-    }
-
-    public static String getRealIp(HttpServletRequest request) {
-        // 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址
-
-        String ip = request.getHeader("X-Forwarded-For");
-        if (log.isInfoEnabled()) {
-            log.info("getIpAddress(HttpServletRequest) - X-Forwarded-For - String ip=" + ip);
-        }
-
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("Proxy-Client-IP");
-                if (log.isInfoEnabled()) {
-                    log.info("getIpAddress(HttpServletRequest) - Proxy-Client-IP - String ip=" + ip);
-                }
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("WL-Proxy-Client-IP");
-                if (log.isInfoEnabled()) {
-                    log.info("getIpAddress(HttpServletRequest) - WL-Proxy-Client-IP - String ip=" + ip);
-                }
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("HTTP_CLIENT_IP");
-                if (log.isInfoEnabled()) {
-                    log.info("getIpAddress(HttpServletRequest) - HTTP_CLIENT_IP - String ip=" + ip);
-                }
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-                if (log.isInfoEnabled()) {
-                    log.info("getIpAddress(HttpServletRequest) - HTTP_X_FORWARDED_FOR - String ip=" + ip);
-                }
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getRemoteAddr();
-                if (log.isInfoEnabled()) {
-                    log.info("getIpAddress(HttpServletRequest) - getRemoteAddr - String ip=" + ip);
-                }
-            }
-        } else if (ip.length() > 15) {
-            String[] ips = ip.split(",");
-            for (int index = 0; index < ips.length; index++) {
-                String strIp = (String) ips[index];
-                if (!("unknown".equalsIgnoreCase(strIp))) {
-                    ip = strIp;
-                    break;
-                }
-            }
-        }
-        return ip;
     }
 }

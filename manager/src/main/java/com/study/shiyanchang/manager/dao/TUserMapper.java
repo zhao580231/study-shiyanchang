@@ -21,4 +21,11 @@ public interface TUserMapper {
      * @return
      */
     TUser getById(@Param("id") int id);
+
+    /**
+     * 根据token从t_user表中获取数据
+     * @param token
+     * @return
+     */
+    TUser selectUserByToken(@Param("token") String token);
 }

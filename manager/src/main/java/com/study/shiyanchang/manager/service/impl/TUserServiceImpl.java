@@ -22,4 +22,9 @@ public class TUserServiceImpl implements TUserService {
     public TUser getById(int i) {
         return userMapper.getById(i);
     }
+
+    @Override
+    public TUser selectUserByToken(String token) {
+        return userMapper.selectUserByToken(token);
+    }
 }

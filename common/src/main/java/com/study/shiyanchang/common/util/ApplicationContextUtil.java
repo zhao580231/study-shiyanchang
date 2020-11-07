@@ -1,4 +1,4 @@
-package com.study.shiyanchang.business.config;
+package com.study.shiyanchang.common.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

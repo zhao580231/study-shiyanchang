@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Data
-@RefreshScope // 虽然在application上加了，但是当naocs刷新时，这块还是没变，单例了，因此需要在这加一个
+@RefreshScope
 public class MyProperties {
     @Value("${api_path_list}")
     private String apiPathList;
