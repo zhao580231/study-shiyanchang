@@ -26,6 +26,7 @@ public class ServiceExceptionFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             if (e instanceof NestedServletException) {
                 if (e.getCause().getClass().equals(ServiceException.class)) {
                     ServiceException se = (ServiceException)e.getCause();

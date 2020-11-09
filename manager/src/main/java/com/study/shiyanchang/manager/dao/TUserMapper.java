@@ -1,5 +1,6 @@
 package com.study.shiyanchang.manager.dao;
 
+import com.study.shiyanchang.common.entity.dto.UserLoginDTO;
 import com.study.shiyanchang.common.entity.po.TUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,7 +21,7 @@ public interface TUserMapper {
      * @param id
      * @return
      */
-    TUser getById(@Param("id") int id);
+    TUser getById(@Param("id") Long id);
 
     /**
      * 根据token从t_user表中获取数据
@@ -28,4 +29,18 @@ public interface TUserMapper {
      * @return
      */
     TUser selectUserByToken(@Param("token") String token);
+
+    /**
+     * 根据账号和密码获取用户信息
+     * @param userName
+     * @param password
+     * @return
+     */
+    TUser getByNameAndPwd(@Param("userName") String userName, @Param("password") String password);
+
+    /**
+     * 根据ID修改用户最后登录时间
+     * @param id
+     */
+    void setUserLastDateTime(@Param("id") Long id);
 }

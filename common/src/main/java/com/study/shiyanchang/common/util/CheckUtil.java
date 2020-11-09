@@ -19,22 +19,22 @@ public class CheckUtil {
     }
 
     /**
-     * 查看请求的url是否在各模块允许访问的api集合地址内
+     * 查看请求的url是否包含在api集合地址内
      * @param apiPathListStr 允许访问的api集合地址
      * @param realPath 请求的url
-     * @return
+     * @return true=允许，false=不允许
      */
     public static boolean checkRealUrl(String apiPathListStr, String realPath){
         String separator = "/";
-        boolean result = true;
+        boolean result = false;
         List<String> apiPathList = JSONArray.parseArray(apiPathListStr, String.class);
         if(apiPathList == null || apiPathList.isEmpty()){
-            return result;
+            return false;
         }
         try{
         String[] realPathSplit = realPath.split(separator);
         for(String apiPath: apiPathList){
-            if(result){
+            if(!result){
                 String[] aStr = apiPath.split(separator);
                 StringBuilder newStr = new StringBuilder();
                 for(int i=0;i<aStr.length;i++){
@@ -46,13 +46,22 @@ public class CheckUtil {
                     newStr.append(i == 0 ? "" : "/").append(str);
                 }
                 if(newStr.toString().equals(realPath)){
-                    result = false;
+                    result = true;
                 }
             }
         }
         }catch (Exception e){
-            return true;
+            return false;
         }
         return result;
+    }
+
+    /**
+     * 判断是否是swagger相关的url
+     * @param requestURI
+     * @return
+     */
+    public static boolean checkSwaggerUrl(String requestURI) {
+        return requestURI.contains("swagger") || requestURI.contains("/api/v2/api-docs");
     }
 }

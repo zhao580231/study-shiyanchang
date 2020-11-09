@@ -45,7 +45,7 @@ public class RequestUrlFilter extends OncePerRequestFilter {
                 throw new ServiceException(ResultCode.ERROR_METHODS,"调用接口所传的时间戳超过固定期限！");
             }
             String realUrl = requestURI.substring(0,lastIndexOf);
-            if(CheckUtil.checkRealUrl(myProperties.getApiPathList(), realUrl)){
+            if(!CheckUtil.checkRealUrl(myProperties.getApiPathList(), realUrl)){
                 throw new ServiceException(ResultCode.ERROR_METHODS,"调用接口地址未经过许可，或者不存在！");
             }
             MongoService mongoService = ApplicationContextUtil.getBean(MongoService.class);

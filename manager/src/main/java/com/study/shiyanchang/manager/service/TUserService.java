@@ -1,5 +1,6 @@
 package com.study.shiyanchang.manager.service;
 
+import com.study.shiyanchang.common.entity.dto.UserLoginDTO;
 import com.study.shiyanchang.common.entity.po.TUser;
 
 /**
@@ -15,7 +16,7 @@ public interface TUserService {
      * @param i
      * @return
      */
-    TUser getById(int i);
+    TUser getById(Long id);
 
     /**
      * 根据token获取用户信息
@@ -23,4 +24,11 @@ public interface TUserService {
      * @return
      */
     TUser selectUserByToken(String token);
+
+    /**
+     * 根据账号和密码获取用户信息
+     * @param userLoginDTO
+     * @return
+     */
+    TUser getByNameAndPwd(UserLoginDTO userLoginDTO);
 }

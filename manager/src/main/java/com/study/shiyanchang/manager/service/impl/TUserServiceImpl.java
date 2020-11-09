@@ -1,5 +1,6 @@
 package com.study.shiyanchang.manager.service.impl;
 
+import com.study.shiyanchang.common.entity.dto.UserLoginDTO;
 import com.study.shiyanchang.common.entity.po.TUser;
 import com.study.shiyanchang.manager.dao.TUserMapper;
 import com.study.shiyanchang.manager.service.TUserService;
@@ -19,12 +20,21 @@ public class TUserServiceImpl implements TUserService {
     private TUserMapper userMapper;
 
     @Override
-    public TUser getById(int i) {
+    public TUser getById(Long i) {
         return userMapper.getById(i);
     }
 
     @Override
     public TUser selectUserByToken(String token) {
         return userMapper.selectUserByToken(token);
+    }
+
+    @Override
+    public TUser getByNameAndPwd(UserLoginDTO userLoginDTO) {
+        TUser user = userMapper.getByNameAndPwd(userLoginDTO.getUserName(), userLoginDTO.getPassword());
+        if(user != null){
+            userMapper.setUserLastDateTime(user.getId());
+        }
+        return user;
     }
 }
