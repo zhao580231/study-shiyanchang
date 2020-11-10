@@ -1,11 +1,12 @@
 package com.study.shiyanchang.api.service;
 
 import com.study.shiyanchang.common.entity.dto.UserLoginDTO;
+import com.study.shiyanchang.common.entity.dto.UserUpdateDTO;
 import com.study.shiyanchang.common.entity.po.TUser;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(value = "manager")
 public interface UserFeignService {
@@ -19,4 +20,15 @@ public interface UserFeignService {
     TUser getUserById(@PathVariable("loginUserId") long loginUserId,
                       @PathVariable("id") Long id,
                       @PathVariable("times") long currentTimeMillis);
+
+    @PostMapping(value = "manager/user/state/{loginUserId}/{id}/{state}/{times}")
+    ResponseEntity<Object> setUserState(@PathVariable("loginUserId") long loginUserId,
+                                        @PathVariable("id") Long id,
+                                        @PathVariable("state") Integer state,
+                                        @PathVariable("times") long currentTimeMillis);
+
+    @PostMapping(value = "manager/user/update/{loginUserId}/{times}")
+    ResponseEntity<Object> updateUser(@RequestBody UserUpdateDTO userUpdateDTO,
+                                      @PathVariable("loginUserId") long loginUserId,
+                                      @PathVariable("times") long currentTimeMillis);
 }

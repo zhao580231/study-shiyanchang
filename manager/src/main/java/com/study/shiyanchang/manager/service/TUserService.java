@@ -1,6 +1,7 @@
 package com.study.shiyanchang.manager.service;
 
 import com.study.shiyanchang.common.entity.dto.UserLoginDTO;
+import com.study.shiyanchang.common.entity.dto.UserUpdateDTO;
 import com.study.shiyanchang.common.entity.po.TUser;
 
 /**
@@ -13,7 +14,7 @@ public interface TUserService {
 
     /**
      * 根据ID获取实体
-     * @param i
+     * @param id
      * @return
      */
     TUser getById(Long id);
@@ -31,4 +32,25 @@ public interface TUserService {
      * @return
      */
     TUser getByNameAndPwd(UserLoginDTO userLoginDTO);
+
+    /**
+     * 根据ID修改用户状态
+     * @param id
+     * @param state
+     */
+    void setUserState(Long id, Integer state);
+
+    /**
+     * 修改用户信息
+     * @param userUpdateDTO
+     */
+    void updateUserInfo(UserUpdateDTO userUpdateDTO);
+
+    /**
+     * 根据用户ID和手机号，校验手机号是否重复
+     * @param id
+     * @param phone
+     * @return
+     */
+    TUser checkUserPhone(Long id, String phone);
 }

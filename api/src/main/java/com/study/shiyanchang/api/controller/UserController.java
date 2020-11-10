@@ -7,6 +7,7 @@ import com.study.shiyanchang.common.base.CurrentScope;
 import com.study.shiyanchang.common.base.ResultCode;
 import com.study.shiyanchang.common.entity.contants.UserStateEnum;
 import com.study.shiyanchang.common.entity.dto.UserLoginDTO;
+import com.study.shiyanchang.common.entity.dto.UserUpdateDTO;
 import com.study.shiyanchang.common.entity.po.TUser;
 import com.study.shiyanchang.common.entity.vo.UserInfoVO;
 import com.study.shiyanchang.common.entity.vo.UserLoginVO;
@@ -78,6 +79,28 @@ public class UserController {
     @PostMapping("/exchange/{id}/{state}")
     @ApiOperation(value = "根据ID获取用户信息", notes = "需要根据当前登录用户ID判断是否可以获取到用户信息")
     public ResponseEntity<Object> setUserState(@PathVariable Long id, @PathVariable Integer state){
-        return null;
+        // 验证用户要修改的状态是否为允许的数据，0或1，不能传其他
+        boolean isHave = false;
+        for(UserStateEnum userStateEnum: UserStateEnum.values()){
+            if(userStateEnum.getId() == state){
+                isHave = true;
+                break;
+            }
+        }
+        if(!isHave){
+            return BaseResponse.sendDataNull("状态值");
+        }
+        // 验证通过，修改用户状态，参数说明：1=登陆人ID，2=修改的用户ID，3=要修改的状态，4=验证使用的时间戳
+        return userFeignService.setUserState(CurrentScope.getLoginUserId(), id, state, System.currentTimeMillis());
+    }
+
+    @PostMapping("/update")
+    @ApiOperation(value = "修改用户信息", notes = "仅能修改部分字段，并且必须要传ID")
+    public ResponseEntity<Object> update(@RequestBody UserUpdateDTO userUpdateDTO){
+        ResponseEntity<Object> errorEntity = propertyService.checkUserUpdateProperties(userUpdateDTO);
+        if(errorEntity != null){
+            return errorEntity;
+        }
+        return userFeignService.updateUser(userUpdateDTO, CurrentScope.getLoginUserId(), System.currentTimeMillis());
     }
 }

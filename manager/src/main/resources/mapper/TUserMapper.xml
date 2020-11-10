@@ -32,4 +32,16 @@
     <update id="setUserLastDateTime" parameterType="java.lang.Long" >
         update t_user set last_time = now() where id = #{id} limit 1
     </update>
+
+    <update id="setUserState">
+        update t_user set state = #{state} where id = #{id} limit 1
+    </update>
+
+    <update id="updateUserInfo" parameterType="com.study.shiyanchang.common.entity.dto.UserUpdateDTO">
+        update t_user set name = #{name},phone = #{phone} where id = #{id} limit 1
+    </update>
+
+    <select id="checkUserPhone" resultMap="BaseResultMap">
+        select id from t_user where phone = #{phone} and id != #{id} limit 1
+    </select>
 </mapper>

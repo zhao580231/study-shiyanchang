@@ -1,6 +1,7 @@
 package com.study.shiyanchang.manager.service.impl;
 
 import com.study.shiyanchang.common.entity.dto.UserLoginDTO;
+import com.study.shiyanchang.common.entity.dto.UserUpdateDTO;
 import com.study.shiyanchang.common.entity.po.TUser;
 import com.study.shiyanchang.manager.dao.TUserMapper;
 import com.study.shiyanchang.manager.service.TUserService;
@@ -36,5 +37,20 @@ public class TUserServiceImpl implements TUserService {
             userMapper.setUserLastDateTime(user.getId());
         }
         return user;
+    }
+
+    @Override
+    public void setUserState(Long id, Integer state) {
+        userMapper.setUserState(id, state);
+    }
+
+    @Override
+    public void updateUserInfo(UserUpdateDTO userUpdateDTO) {
+        userMapper.updateUserInfo(userUpdateDTO);
+    }
+
+    @Override
+    public TUser checkUserPhone(Long id, String phone) {
+        return userMapper.checkUserPhone(id, phone);
     }
 }

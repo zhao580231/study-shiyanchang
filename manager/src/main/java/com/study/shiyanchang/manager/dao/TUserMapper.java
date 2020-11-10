@@ -1,6 +1,7 @@
 package com.study.shiyanchang.manager.dao;
 
 import com.study.shiyanchang.common.entity.dto.UserLoginDTO;
+import com.study.shiyanchang.common.entity.dto.UserUpdateDTO;
 import com.study.shiyanchang.common.entity.po.TUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -43,4 +44,25 @@ public interface TUserMapper {
      * @param id
      */
     void setUserLastDateTime(@Param("id") Long id);
+
+    /**
+     * 根据ID修改用户状态
+     * @param id
+     * @param state
+     */
+    void setUserState(@Param("id") Long id, @Param("state") Integer state);
+
+    /**
+     * 修改用户信息
+     * @param userUpdateDTO
+     */
+    void updateUserInfo(UserUpdateDTO userUpdateDTO);
+
+    /**
+     * 根据<>ID和 ==手机号，获取用户
+     * @param id
+     * @param phone
+     * @return
+     */
+    TUser checkUserPhone(@Param("id")Long id, @Param("phone")String phone);
 }
