@@ -1,5 +1,8 @@
-package com.study.shiyanchang.business.service;
+package com.study.shiyanchang.common.service;
 
+import com.study.shiyanchang.common.base.CurrentScope;
+import com.study.shiyanchang.common.entity.collection.LoginErrorLog;
+import com.study.shiyanchang.common.entity.collection.OperationLog;
 import com.study.shiyanchang.common.entity.collection.RequestLog;
 import com.study.shiyanchang.common.excption.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +49,30 @@ public class MongoService {
             e.printStackTrace();
         }
         mongoTemplate.insert(requestLog);
+    }
+
+    /**
+     * 新增操作日志的记录
+     * @param content 操作内容，由调用方自定义
+     */
+    public void insertOperation(String content){
+        OperationLog operationLog = new OperationLog();
+        operationLog.setUserId(CurrentScope.getLoginUserId());
+        operationLog.setGmtCreate(LocalDateTime.now());
+        operationLog.setContent(content);
+        mongoTemplate.insert(operationLog);
+    }
+
+    /**
+     * 新增登录错误日志的记录
+     * @param userName
+     * @param pwd
+     */
+    public void insertLoginError(String userName, String pwd){
+        LoginErrorLog loginErrorLog = new LoginErrorLog();
+        loginErrorLog.setUserName(userName);
+        loginErrorLog.setPwd(pwd);
+        loginErrorLog.setGmtCreate(LocalDateTime.now());
+        loginErrorLog.setAddr(CurrentScope.getLoginUserAddr().get());
     }
 }

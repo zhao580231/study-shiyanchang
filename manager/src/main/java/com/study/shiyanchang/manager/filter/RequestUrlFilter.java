@@ -1,16 +1,13 @@
 package com.study.shiyanchang.manager.filter;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.phantomthief.scope.Scope;
-import com.study.shiyanchang.common.base.ResponseUtils;
 import com.study.shiyanchang.common.base.ResultCode;
 import com.study.shiyanchang.common.excption.ServiceException;
+import com.study.shiyanchang.common.service.MongoService;
 import com.study.shiyanchang.common.util.ApplicationContextUtil;
 import com.study.shiyanchang.common.util.CheckUtil;
 import com.study.shiyanchang.common.util.IpUtil;
 import com.study.shiyanchang.manager.config.MyProperties;
-import com.study.shiyanchang.manager.service.MongoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -19,10 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.study.shiyanchang.common.base.ResultCode.ERROR_SYSTEM;
 
 @Slf4j
 public class RequestUrlFilter extends OncePerRequestFilter {

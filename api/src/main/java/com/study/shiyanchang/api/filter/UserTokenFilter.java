@@ -9,6 +9,7 @@ import com.study.shiyanchang.common.entity.po.TUser;
 import com.study.shiyanchang.common.excption.ServiceException;
 import com.study.shiyanchang.common.util.ApplicationContextUtil;
 import com.study.shiyanchang.common.util.CheckUtil;
+import com.study.shiyanchang.common.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -49,6 +50,8 @@ public class UserTokenFilter extends OncePerRequestFilter {
                 }
                 CurrentScope.setLoginUserId(user.getId());
                 CurrentScope.setLoginUserToken(token);
+                CurrentScope.setLoginUserComId(user.getCompanyId());
+                CurrentScope.setLoginUserAddr(IpUtil.getRealIp(request));
             }
             filterChain.doFilter(request, response);
         }finally {

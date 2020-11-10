@@ -4,6 +4,7 @@ import com.study.shiyanchang.common.base.BaseResponse;
 import com.study.shiyanchang.common.entity.dto.UserLoginDTO;
 import com.study.shiyanchang.common.entity.dto.UserUpdateDTO;
 import com.study.shiyanchang.common.entity.po.TUser;
+import com.study.shiyanchang.common.service.MongoService;
 import com.study.shiyanchang.common.util.MD5;
 import com.study.shiyanchang.manager.service.TUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private TUserService userService;
+    @Autowired
+    private MongoService mongoService;
 
     @GetMapping("/{token}")
     public TUser getUser(@PathVariable String token){
@@ -26,7 +29,11 @@ public class UserController {
     public TUser login(UserLoginDTO userLoginDTO){
         // 将密码进行md5加盐加密
         userLoginDTO.setPassword(MD5.encodeByMd5AndSalt(userLoginDTO.getPassword()));
-        return userService.getByNameAndPwd(userLoginDTO);
+        TUser user = userService.getByNameAndPwd(userLoginDTO);
+        if(user == null){
+            mongoService.insertLoginError(userLoginDTO.getUserName(), userLoginDTO.getPassword());
+        }
+        return user;
     }
 
     // todo: 2020-11-09，还没做完，只是校验
@@ -51,6 +58,8 @@ public class UserController {
 
         // 修改用户状态
         userService.setUserState(id, state);
+        // 增加一个操作日志，这个只是个例子！！！！
+        mongoService.insertOperation("用户管理-更新用户状态，需要将用户{}状态修改为{}");
         return BaseResponse.operateSuccessMessage();
     }
 
@@ -69,6 +78,8 @@ public class UserController {
         }
         // 修改用户状态
         userService.updateUserInfo(userUpdateDTO);
+        // 增加一个操作日志，这个只是个例子！！！！
+        mongoService.insertOperation("用户管理-修改用户信息，参数内容：{}");
         return BaseResponse.saveSuccessMessage();
     }
 }
